@@ -73,9 +73,9 @@ function _phptemplate_variables($hook, $vars) {
     views_set_breadcrumb($view);
   }
 
-  //if ($num_nodes) {
-//    $output .= views_get_textarea($view, $type, 'header');
-//  }
+  if ($num_nodes) {
+   $output .= views_get_textarea($view, $type, 'header');
+ }
 
   if ($type != 'block' && $view->exposed_filter) {
     $output .= views_theme('views_display_filters', $view);
