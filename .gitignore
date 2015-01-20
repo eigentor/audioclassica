@@ -1,0 +1,9 @@
+/files
+
+sites/*/settings.*php
+
+*.sublime-project
+*.sublime-workspace
+
+
+

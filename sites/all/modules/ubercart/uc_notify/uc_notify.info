@@ -1,0 +1,12 @@
+; $Id: uc_notify.info,v 1.5.2.2 2008/07/29 22:22:43 rszrama Exp $
+name = Notify
+description = Send checkout and order email notifications to customers and administrators.
+dependencies = uc_store uc_order token
+package = "Ubercart - core (optional)"
+
+
+; Information added by drupal.org packaging script on 2010-08-11
+version = "5.x-1.10"
+project = "ubercart"
+datestamp = "1281551492"
+

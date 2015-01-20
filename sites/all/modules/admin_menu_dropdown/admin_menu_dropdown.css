@@ -1,0 +1,8 @@
+/* $Id $ */
+
+/**
+* admin_menu_dropdown.css: Hides the drupal administration menu. Will show on 
+* pressing defined key combo
+*/
+#admin-menu { display:none; position: fixed;}
+body { margin-top: 0px !important; }

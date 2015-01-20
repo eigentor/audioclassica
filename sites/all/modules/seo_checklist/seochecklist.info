@@ -1,0 +1,9 @@
+; $Id: seochecklist.info,v 1.1.2.1 2009/08/07 22:21:05 eclipsegc Exp $
+name = SEO Checklist
+description = A Search Engine Optimization checklist for Drupal 5.
+package = SEO Checklist
+; Information added by drupal.org packaging script on 2009-08-07
+version = "5.x-2.0"
+project = "seo_checklist"
+datestamp = "1249683959"
+

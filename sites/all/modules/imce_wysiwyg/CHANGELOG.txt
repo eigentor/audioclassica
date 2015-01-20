@@ -1,0 +1,25 @@
+
+IMCE Wysiwyg x.x-x.x, xxxx-xx-xx
+--------------------------------
+
+
+IMCE Wysiwyg 5.x-1.x, xxxx-xx-xx
+--------------------------------
+#533168 by suhock, that0n3guy, Niels Hackius: Added support for CKeditor.
+#508180 by joachim: Added mention to README of needing Image plugin enabled.
+
+
+IMCE Wysiwyg 5.x-1.0, 2009-06-22
+--------------------------------
+#385962 by kingandy, lemunet, sethcohn: Fixed integration for IMCE in D5.
+#385962 by pletcher, sun: Ported imce_wysiwyg back to Drupal 5.
+
+
+IMCE Wysiwyg 6.x-1.0, 2009-03-04
+--------------------------------
+#380944 by sun: Fixed url encoding for FCKeditor and proper invocation of
+  imce_access().
+#380944 by sun: Added documentation; code clean-up.
+#287025 by sun: Added Wysiwyg API integration code for IMCE.
+
+

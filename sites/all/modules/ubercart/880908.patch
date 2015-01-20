@@ -1,0 +1,16 @@
+Index: uc_store/uc_store.module
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/ubercart/uc_store/uc_store.module,v
+retrieving revision 1.13.2.18
+diff -u -p -r1.13.2.18 uc_store.module
+--- uc_store/uc_store.module	16 Mar 2010 23:43:28 -0000	1.13.2.18
++++ uc_store/uc_store.module	12 Aug 2010 16:55:23 -0000
+@@ -2037,7 +2037,7 @@ function uc_address_format($first_name, 
+   $address = strtr($format, $variables);
+   $address = strtr($address, array("\n" => '<br />'));
+ 
+-  $match = array('/^<br />/', '/<br />$/', '/<br />(\s*|[\s*<br />\s*]+)<br />/', '/<br /><br />/', '`<br />, N/A`');
++  $match = array('`^<br( /)?>`', '`<br( /)?>$`', '`<br( /)?>(\s*|[\s*<br( /)?>\s*]+)<br( /)?>`', '`<br( /)?><br( /)?>`', '`<br( /)?>, N/A`');
+   $replace = array('', '', '<br />', '<br />', '', '');
+   $address = preg_replace($match, $replace, $address);
+ 

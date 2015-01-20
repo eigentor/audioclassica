@@ -1,0 +1,92 @@
+# Danish translation of Drupal (poormanscron.module)
+# Copyright 2006 Morten Wulff <wulff@ratatosk.net>
+msgid ""
+msgstr ""
+"Project-Id-Version: Danish translation of Drupal (poormanscron.module) $Id: da.po,v 1.1.2.2 2007/12/16 18:18:13 wulff Exp $\n"
+"POT-Creation-Date: 2005-04-18 11:11+0200\n"
+"PO-Revision-Date: 2007-12-16 19:17+0100\n"
+"Last-Translator: Morten Wulff <wulff@ratatosk.net>\n"
+"Language-Team: Danish <l10n@drupaldanmark.dk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Danish\n"
+"X-Poedit-Country: DENMARK\n"
+
+#: poormanscron.module:17
+msgid "Runs Drupal cron jobs without the cron application."
+msgstr "Kører Drupal cron-opgaver uden cron-programmet."
+
+#: poormanscron.module:109
+#: poormanscron.info:0
+msgid "Poormanscron"
+msgstr "Fattigmands-cron"
+
+#: poormanscron.module:110
+msgid "A module which runs Drupal cron jobs without the cron application."
+msgstr "Kører Drupal cron-opgaver uden cron-programmet."
+
+#: poormanscron.module:125
+msgid "Time intervals"
+msgstr "Tidsintervaller"
+
+#: poormanscron.module:127
+msgid "Cron runs interval"
+msgstr "Cron-interval"
+
+#: poormanscron.module:130
+msgid "Minimum number of minutes between cron runs. Cron will actually execute during the first page request after the interval has elapsed."
+msgstr "Mindste antal minutter mellem cron-kørsler. Cron køres under den første forespørgsel efter intervallet er udløbet."
+
+#: poormanscron.module:133
+msgid "Retry interval"
+msgstr "Forsøg igen-interval"
+
+#: poormanscron.module:136
+msgid "The number of minutes to wait after a cron run error before retrying."
+msgstr "Antal minutter der ventes efter en cron-fejl før der forsøges igen."
+
+#: poormanscron.module:139
+msgid "Logging"
+msgstr "Logning"
+
+#: poormanscron.module:141
+msgid "Log successful cron runs"
+msgstr "Log succesfulde cron-kørsler"
+
+#: poormanscron.module:143
+#: ;149
+msgid "Yes"
+msgstr "Ja"
+
+#: poormanscron.module:143
+#: ;149
+msgid "No"
+msgstr "Nej"
+
+#: poormanscron.module:144
+msgid "If you want to log successful cron runs to the Drupal watchdog, say Yes here. If those messages annoy you, disable them by selecting No."
+msgstr "Vælg 'ja' hvis du ønsker at registrere succesfulde cron-kørsler. Hvis beskederne irriterer dig, skal du vælge 'nej'."
+
+#: poormanscron.module:147
+msgid "Log poormanscron progress"
+msgstr "Log fattigmands-cron aktivitet"
+
+#: poormanscron.module:150
+msgid "If you want to log the progress of a poormanscron run to the Drupal watchdog, say Yes here. If those messages annoy you, disable them by selecting No."
+msgstr "Vælg 'ja' hvis du ønsker at registrere succesfulde cron-kørsler. Hvis beskederne irriterer dig, skal du vælge 'nej'."
+
+#: poormanscron.module:57
+#: ;68
+msgid "cron"
+msgstr "cron"
+
+#: poormanscron.module:0
+msgid "poormanscron"
+msgstr "fattigmands-cron"
+
+#: poormanscron.info:0
+msgid "Internal scheduler for users without a cron application."
+msgstr "Kører planlagte opgaver for brugere uden et cron-program."
+

@@ -1,0 +1,12 @@
+; $Id: uc_cart.info,v 1.6.2.2 2008/07/29 22:22:42 rszrama Exp $
+name = Cart
+description = REQUIRED. Controls the shopping cart for an Ubercart e-commerce site.
+dependencies = uc_store uc_order uc_product workflow_ng
+package = Ubercart - core
+
+
+; Information added by drupal.org packaging script on 2010-08-11
+version = "5.x-1.10"
+project = "ubercart"
+datestamp = "1281551492"
+

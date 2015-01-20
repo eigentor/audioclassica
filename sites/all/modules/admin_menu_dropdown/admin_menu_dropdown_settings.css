@@ -1,0 +1,9 @@
+/* $Id: admin_menu_dropdown_settings.css,v 1.1 2008/01/31 20:29:42 shawnconn Exp $ */
+
+.inline-element {
+  display:inline;
+} 
+
+.inline-element .form-item {
+  display:inline;
+}

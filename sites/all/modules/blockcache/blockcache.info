@@ -1,0 +1,10 @@
+; $Id$
+name = Block Cache
+description = Allows caching of blocks with configurable refresh settings.
+dependencies = block
+
+; Information added by drupal.org packaging script on 2008-07-18
+version = "5.x-1.x-dev"
+project = "blockcache"
+datestamp = "1216339286"
+

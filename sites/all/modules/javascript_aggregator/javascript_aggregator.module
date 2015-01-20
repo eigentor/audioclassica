@@ -1,0 +1,185 @@
+<?php
+// $Id: javascript_aggregator.module,v 1.15 2008/04/19 15:58:43 derjochenmeyer Exp $
+
+/**
+ * @file
+ * Aggregates Javascript files to increase performance.
+ *
+ * This modules parses the phptemplate $scripts variable for .js files,
+ * extracts them and stores them in a md5 named file under files/js.
+ */
+
+/**
+ * Main function that finds .js files in $scripts.
+ */
+function javascript_aggregator_cache($scripts) {
+  if (variable_get('javascript_aggregator_aggregate_js', 0)) {
+    // compiling exclude pattern
+    if ($exclude_pattern = variable_get('javascript_aggregator_exclude_js', FALSE)) {
+      $exclude_pattern = strtr($exclude_pattern, array(
+          '\\' => '/',
+          '.' => '\\.',
+        ));
+      $exclude_pattern = preg_split('/\r?\n/', $exclude_pattern, -1, PREG_SPLIT_NO_EMPTY);
+      $exclude_pattern = '~'.implode("$|", $exclude_pattern).'$~';
+    }
+    // One regular expression to extract and remove .js paths and filenames from $scripts variable
+    $pattern = "!(<script type=\"text\/javascript\" src=\")(.*?)(\"(.*?)><\/script>)!";
+    // Create an array $matches with pieces of $pattern found in $scripts
+    preg_match_all($pattern, $scripts, $matches);
+    // $matches[2] is where paths and filenames are stored
+
+    // remove aggregated js files from $scripts using the same $pattern
+    $scripts  = preg_replace($pattern, "", $scripts);
+
+    $scripts_js_files = array();
+		$scripts_js_links = array();
+
+    foreach ($matches[2] as $value) {
+      if ($exclude_pattern && preg_match($exclude_pattern, $value)) {
+        $scripts_js_links[] = $value; // prepares it to add it later after aggregation
+      }
+      else {
+        // read contents of js file and add it to $contents
+        if (substr($value, 0, 1) == "/") $value = substr($value, 1);
+
+        if (base_path() != "/") {
+          $value = substr($value, strpos($value, '/')+1);
+        }
+        $scripts_js_files[$value] = filemtime($value);
+      }
+    }
+
+    // Generate a unique filename for any set of js files
+    $filename = md5(serialize(array($scripts_js_files, filemtime(__FILE__)))).'.js';
+
+    // create files/js similar to drupal_build_css_cache (common.inc)
+    $jspath = file_create_path('js');
+    file_check_directory($jspath, FILE_CREATE_DIRECTORY);
+    $jsfile = $jspath.'/'.$filename;
+
+    // link the aggregated file
+    array_unshift($scripts_js_links, base_path().$jsfile);
+
+    if (!file_exists($jsfile)) {
+      $contents = '';
+
+      foreach ($scripts_js_files as $scripts_js_file => $filemtime) {
+        $data = file_get_contents($scripts_js_file);
+
+        if (variable_get('javascript_aggregator_optimize_js', 0)) {
+          // Perform some safe JS optimizations.
+          $data = preg_replace('<
+            /\*.*?\*/
+            >x', '\1', $data);
+        }
+        $contents .= ";\n/* AGGREGATED JS FILE: $scripts_js_file */\n".$data."\n";
+      }
+      // Create the js file.
+      file_save_data($contents, $jsfile, FILE_EXISTS_REPLACE);
+    }
+		// adds excluded files again to the $scripts variable
+		if (count($scripts_js_links) > 0) {
+      foreach ($scripts_js_links as $add_to_scripts) {
+        $script_links .= "\n<script type=\"text/javascript\" src=\"$add_to_scripts\"></script>";
+      }
+    }
+    $scripts = $script_links.$scripts;
+  }
+  return $scripts;
+}
+
+
+
+/**
+ * Delete all cached JS files.
+ */
+function javascript_aggregator_clear_cache() {
+  $success = file_scan_directory(file_create_path('js'), '.*', array('.', '..', 'CVS'), 'file_delete', TRUE);
+  if ($success) {
+    drupal_set_message(t('Javascript cache cleared.'), $type = 'status');
+  }
+  else {
+    drupal_set_message(t('Javascript cache could not be cleared. Or already empty.'), $type = 'error');
+  }
+  drupal_goto('admin/settings/performance');
+}
+
+
+
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Adds the configuration stuff to admin/settings/performance. Inspired by http://drupal.org/node/149402
+ */
+function javascript_aggregator_form_alter($form_id, &$form) {
+
+  if ($form_id == 'system_performance_settings') {
+    $directory = file_directory_path();
+    $is_writable = is_dir($directory) && is_writable($directory) && (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PUBLIC);
+
+    $form['javascript_aggregation'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Javascript Aggregation'),
+      '#description' => t('<p>The Javascript Aggregator Module aggregates javascript files into a single cached file. This will help to reduce the number of requests made to your webserver on every pageload, reducing server load and average page loading time.</p><p>To enable this feature, make sure you have set up your files directory correctly and your download method is not set to private.</p><p>Click here to <a href="@clearjscache">clear the javascript cache.</a></p><p>NOTICE: If you clear the cache while Javascript Aggregation is enabled, your files/js directory will NOT be empty because a new file is instantly created.</p>', array('@clearjscache' => url('clearjscache'))),
+      '#weight' => 0
+    );
+
+    $form['javascript_aggregation']['javascript_aggregator_aggregate_js'] = array(
+      '#type' => 'radios',
+      '#title' => t('Aggregate JavaScript files'),
+      '#default_value' => variable_get('javascript_aggregator_aggregate_js', 0),
+      '#disabled' => !$is_writable,
+      '#options' => array(t('Disabled'), t('Enabled')),
+      '#description' => t("This option can interfere with module development. It is recommended to only turn this on when your site is complete."),
+    );
+
+    $form['javascript_aggregation']['javascript_aggregator_optimize_js'] = array(
+      '#type' => 'radios',
+      '#title' => t('Optimize JavaScript files'),
+      '#default_value' => variable_get('javascript_aggregator_optimize_js', 0),
+      '#disabled' => !$is_writable,
+      '#options' => array(t('Disabled'), t('Enabled')),
+      '#description' => t("This option removes /* */ comments to reduce file size. If you encounter js errors disable this option."),
+    );
+    
+    $form['javascript_aggregation']['javascript_aggregator_exclude_js'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Exclude from js aggregation'),
+      '#default_value' => variable_get('javascript_aggregator_exclude_js', ''),
+      '#disabled' => !$is_writable,
+      '#description' => t('Enter one js file per line that should be excluded from js aggregation. Check your HTML source for paths. TinyMCE Example: <em>/sites/all/modules/tinymce/tinymce/jscripts/tiny_mce/tiny_mce.js</em> Partial paths are also possible, this does the same <em>tiny_mce.js</em>'),
+      
+    );
+
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ *
+ * Adds a callback mapped on the clear_cache function.
+ */
+function javascript_aggregator_menu($may_cache) {
+
+  $items = array();
+  if (!$may_cache) {
+
+    global $user;
+    if ($user->uid == 1) { // TODO: make this a setting or something
+      $access = TRUE;
+    }
+    else {
+      $access = FALSE;
+    }
+
+    $items[] = array(
+      'path' => 'clearjscache',
+      'callback' => 'javascript_aggregator_clear_cache',
+      'access' => $access,
+      'type' => MENU_CALLBACK
+    );
+  }
+  return $items;
+}
